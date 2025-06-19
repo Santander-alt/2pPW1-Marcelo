@@ -2,12 +2,20 @@ import { Link } from "react-router-dom";
 
 const Dashboard = () => {
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold">Bienvenido al dashboard</h1>
-            <Link to="/jonas">Ir a Jonas</Link>
+        <div className="min-h-screen bg-gradient-to-br from-sky-200 via-sky-300 to-sky-400 flex items-center justify-center p-6">
+            <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md text-center">
+                <h1 className="text-3xl font-bold text-sky-700 mb-4">¡Bienvenido al Dashboard!</h1>
+                <p className="text-sky-800 mb-8">Gestiona tus productos, ventas y más.</p>
+
+                <Link
+                    to="/productos"
+                    className="inline-block px-6 py-3 bg-sky-600 text-white font-semibold rounded-xl shadow-md hover:bg-sky-700 transition duration-300"
+                >
+                    Productos
+                </Link>
+            </div>
         </div>
     );
 };
 
-export default Dashboard;
-  
+export default Dashboard

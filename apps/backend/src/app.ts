@@ -1,3 +1,5 @@
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
 import 'dotenv/config';
 import express from 'express';
 import routes from './routes';
