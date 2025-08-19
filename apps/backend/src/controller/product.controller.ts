@@ -4,19 +4,44 @@ import { db } from '../db/connection';
 import { products } from '../db/schema';
 import { eq } from 'drizzle-orm';
 
+import { Request, Response } from 'express';
+import { db } from '../db/connection';
+import { products, categories } from '../db/schema';
+import { eq } from 'drizzle-orm';
+
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const allProducts = await db.select().from(products);
-    res.json(allProducts);
+    const allProducts = await db
+      .select({
+        id: products.id,
+        name: products.name,
+        price: products.price,
+        categoryId: categories.id,
+        categoryName: categories.name,
+      })
+      .from(products)
+      .leftJoin(categories, eq(products.categoryId, categories.id));
+
+    // Mapear para que category sea un objeto
+    const formattedProducts = allProducts.map(p => ({
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      category: p.categoryId
+        ? { id: p.categoryId, name: p.categoryName }
+        : undefined,
+    }));
+
+    res.json(formattedProducts);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Error al obtener los productos' });
   }
 };
-
 export const createProduct = async (req: Request, res: Response) => {
-  const { name, price } = req.body;
+  const { name, price, categoryId } = req.body;
   try {
-    const result = await db.insert(products).values({ name, price });
+    const result = await db.insert(products).values({ name, price, categoryId });
     res.status(201).json({ message: 'Producto creado', result });
   } catch (error) {
     res.status(500).json({ message: 'Error al crear el producto' });
@@ -25,10 +50,10 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, price } = req.body;
+  const { name, price, categoryId } = req.body;
   try {
     await db.update(products)
-      .set({ name, price })
+      .set({ name, price, categoryId })
       .where(eq(products.id, Number(id)));
     res.json({ message: 'Producto actualizado' });
   } catch (error) {

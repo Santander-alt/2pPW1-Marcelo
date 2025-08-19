@@ -7,6 +7,13 @@ import {
   getAllProducts,
   updateProduct,
 } from 'src/controller/product.controller';
+
+import {
+  getAllCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from 'src/controller/categories.controller';
 import verifyToken from 'src/middleware/auth';
 
 const router = Router();
@@ -34,5 +41,10 @@ router.get('/products', verifyToken, getAllProducts);
 router.post('/products', verifyToken, createProduct);
 router.put('/products/:id', verifyToken, updateProduct);
 router.delete('/products/:id', verifyToken, deleteProduct);
+
+router.get('/categories', verifyToken, getAllCategories);
+router.post('/categories', verifyToken, createCategory);
+router.put('/categories/:id', verifyToken, updateCategory);
+router.delete('/categories/:id', verifyToken, deleteCategory);
 
 export default router;

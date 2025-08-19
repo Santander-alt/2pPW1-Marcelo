@@ -38,6 +38,12 @@ export const products = mysqlTable('products', {
     id: int('id').primaryKey().autoincrement(),
     name: varchar('name', { length: 100 }),
     price: int('price'),
+    categoryId: int('category_id').references(() => categories.id),
+});
+
+export const categories = mysqlTable('categories', {
+    id: int('id').primaryKey().autoincrement(),
+    name: varchar('name', { length: 100 }),
 });
 
 // Tabla permissions
